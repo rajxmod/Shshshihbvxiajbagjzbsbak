@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RAJ ULTRA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: #111827;
+      color: white;
+      padding: 2rem;
+    }
+
+    .card-box {
+      background: #1f2937;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .card-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .value-box {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #f9fafb;
+    }
+
+    .shine-effect {
+      background: linear-gradient(135deg, #1e3a8a 0%, #9333ea 100%);
+      position: relative;
+      animation: shine 1.5s ease-in-out infinite;
+    }
+
+    @keyframes shine {
+      0% { background-position: -200%; }
+      50% { background-position: 200%; }
+      100% { background-position: -200%; }
+    }
+
+    .value-box.shiny {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-box.shiny::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: skewX(-45deg);
+      animation: shineEffect 1.5s infinite;
+    }
+
+    @keyframes shineEffect {
+      0% { left: -100%; }
+      50% { left: 100%; }
+      100% { left: -100%; }
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-item {
+      background: #1f2937;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #f1f5f9;
+    }
+
+    .win { color: #22c55e; }
+    .loss { color: #ef4444; }
+    .pending { color: #facc15; }
+
+    .prediction-history {
+      background: #1e293b;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f172a;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .history-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .history-label {
+      font-size: 0.875rem;
+      color: #cbd5e1;
+    }
+
+    .history-status {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .history-status.win {
+      color: #22c55e;
+      animation: shineGreen 1.5s ease-in-out infinite;
+    }
+
+    .history-status.loss {
+      color: #ef4444;
+      animation: shineRed 1.5s ease-in-out infinite;
+    }
+
+    .history-status.pending {
+      color: #facc15;
+      animation: pulsePending 1.5s ease-in-out infinite;
+    }
+
+    @keyframes shineGreen {
+      0%, 100% { text-shadow: 0 0 5px #22c55e, 0 0 10px #22c55e; }
+      50% { text-shadow: 0 0 15px #22c55e, 0 0 25px #22c55e; }
+    }
+
+    @keyframes shineRed {
+      0%, 100% { text-shadow: 0 0 5px #ef4444, 0 0 10px #ef4444; }
+      50% { text-shadow: 0 0 15px #ef4444, 0 0 25px #ef4444; }
+    }
+
+    @keyframes pulsePending {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1 class="text-4xl font-bold text-center text-cyan-400 mb-8 drop-shadow-lg">𝐑𝐀𝐉 𝐔𝐋𝐓𝐑𝐀 𝟑.𝟎</h1>
+
+  <div class="card-box shine-effect">
+    <div class="label">Timer <i class="fas fa-clock text-blue-400"></i></div>
+    <div class="value-box" id="timer">00:00</div>
+  </div>
+
+  <div class="card-box shine-effect">
+    <div class="label">Result <i class="fas fa-chart-line text-purple-400"></i></div>
+    <div class="value-box" id="result">Loading...</div>
+  </div>
+
+  <div class="section-title"><i class="fas fa-signal text-emerald-400"></i> Performance Stats</div>
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-label"><i class="fas fa-trophy text-green-400"></i> Wins</div>
+      <div class="stat-value" id="totalWins">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label"><i class="fas fa-times-circle text-red-400"></i> Losses</div>
+      <div class="stat-value" id="totalLosses">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label"><i class="fas fa-check-circle text-blue-400"></i> Total Bets</div>
+      <div class="stat-value" id="totalBets">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label"><i class="fas fa-chart-bar text-teal-400"></i> Accuracy</div>
+      <div class="stat-value" id="accuracy">0%</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label"><i class="fas fa-server text-pink-400"></i> Server IP</div>
+      <div class="stat-value" id="serverIP">Connected</div>
+    </div>
+  </div>
+
+  <div class="section-title"><i class="fas fa-history text-indigo-400"></i> Prediction History</div>
+  <div id="history" class="prediction-history"></div>
+
+  <script>
+    const pastNumbers = [];
+    const historyData = [];
+    let lastFetchedPeriod = null;
+
+    function updateTimerAndPeriod() {
+      const now = new Date();
+      const indiaOffset = 5.5 * 60 * 60 * 1000;
+      const indiaTime = new Date(now.getTime() + indiaOffset - now.getTimezoneOffset() * 60000);
+
+      const currentSecond = indiaTime.getUTCSeconds();
+      const currentHour = indiaTime.getUTCHours();
+      const currentMinute = indiaTime.getUTCMinutes();
+      const startHour = 5;
+      const startMinute = 29;
+      let elapsedMinutes = (currentHour * 60 + currentMinute) - (startHour * 60 + startMinute);
+      if (elapsedMinutes < 0) elapsedMinutes = 0;
+
+      const dateStr = indiaTime.toISOString().slice(0, 10).replace(/-/g, '');
+      const periodNum = "100001" + String(elapsedMinutes).padStart(4, '0');
+      const fullPeriod = dateStr + periodNum;
+
+      const remainingSeconds = 60 - currentSecond;
+      const timerFormatted = `00:${String(remainingSeconds).padStart(2, '0')}`;
+
+      document.getElementById("timer").innerText = timerFormatted;
+    }
+
+    async function fetchGameResult() {
+      const payload = {
+        pageSize: 10,
+        pageNo: 1,
+        typeId: 1,
+        language: 0,
+        random: "4a0522c6ecd8410496260e686be2a57c",
+        signature: "334B5E70A0C9B8918B0B15E517E2069C",
+        timestamp: Math.floor(Date.now() / 1000)
+      };
+
+      const response = await fetch("https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      return data?.data?.list?.[0] || null;
+    }
+
+    function determineTrendBasedPrediction() {
+      if (pastNumbers.length < 5) {
+        return Math.random() > 0.5 ? "BIG" : "SMALL";
+      }
+
+      const lastFive = pastNumbers.slice(-5);
+      const bigCount = lastFive.filter(n => n >= 5).length;
+      const smallCount = lastFive.filter(n => n < 5).length;
+
+      if (bigCount > smallCount) return "SMALL";
+      if (smallCount > bigCount) return "BIG";
+      return Math.random() > 0.5 ? "BIG" : "SMALL";
+    }
+
+    function autoPredict() {
+      return determineTrendBasedPrediction();
+    }
+
+    async function updatePrediction() {
+      const result = await fetchGameResult();
+      if (!result || result.issueNumber === lastFetchedPeriod) return;
+
+      lastFetchedPeriod = result.issueNumber;
+
+      if (typeof result.number === "number") {
+        pastNumbers.push(result.number);
+        if (pastNumbers.length > 100) pastNumbers.shift();
+      }
+
+      const prediction = autoPredict();
+      const nextPeriod = (BigInt(result.issueNumber) + 1n).toString();
+
+      const resultElem = document.getElementById("result");
+      resultElem.innerText = prediction;
+      resultElem.className = "value-box shiny " + (prediction === "BIG" ? "text-green-400" : "text-red-400");
+
+      historyData.unshift({
+        period: nextPeriod,
+        prediction,
+        resultStatus: "Pending"
+      });
+
+      updateHistory();
+      setTimeout(() => checkWinLoss(result), 2000);
+    }
+
+    function checkWinLoss(result) {
+      historyData.forEach(item => {
+        if (item.period === result.issueNumber) {
+          const actual = result.number >= 5 ? "BIG" : "SMALL";
+          item.resultStatus = item.prediction === actual ? "WIN" : "LOSS";
+        }
+      });
+
+      updateStats();
+      updateHistory();
+    }
+
+    function updateStats() {
+      const wins = historyData.filter(x => x.resultStatus === "WIN").length;
+      const losses = historyData.filter(x => x.resultStatus === "LOSS").length;
+      const total = wins + losses;
+      const accuracy = total ? ((wins / total) * 100).toFixed(1) + "%" : "0%";
+
+      document.getElementById("totalWins").innerText = wins;
+      document.getElementById("totalLosses").innerText = losses;
+      document.getElementById("totalBets").innerText = total;
+      document.getElementById("accuracy").innerText = accuracy;
+      document.getElementById("serverIP").innerText = "Connected";
+    }
+
+    function updateHistory() {
+      const historyDiv = document.getElementById("history");
+      historyDiv.innerHTML = "";
+
+      historyData.forEach(item => {
+        const statusIcon =
+          item.resultStatus === "WIN"
+            ? '<i class="fas fa-check-circle text-green-400"></i>'
+            : item.resultStatus === "LOSS"
+            ? '<i class="fas fa-times-circle text-red-400"></i>'
+            : '<i class="fas fa-spinner fa-spin text-yellow-400"></i>';
+
+        const statusClass = item.resultStatus.toLowerCase();
+
+        historyDiv.innerHTML += `
+          <div class="history-item">
+            <div class="history-label">
+              <i class="fas fa-circle-notch text-cyan-400 mr-1"></i>
+              Period: ${item.period} | Prediction: ${item.prediction}
+            </div>
+            <div class="history-status ${statusClass}">
+              ${statusIcon} ${item.resultStatus}
+            </div>
+          </div>`;
+      });
+    }
+
+    setInterval(updateTimerAndPeriod, 1000);
+    setInterval(updatePrediction, 10000);
+  </script>
+
+</body>
+</html>
